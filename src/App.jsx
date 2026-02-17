@@ -3,28 +3,45 @@ import { useState } from "react"
 function App() {
 
   const [nomeCompleto, setNomeCompleto] = useState("")
-  const [surname, setSurname] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [specializzazione, setSpecializzazione] = useState("")
   const [anniEsperienza, setAnniEsperienza] = useState(0)
   const [descrizione, setDescrizione] = useState("")
 
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 
   function handleSubmit(e) {
     e.preventDefault()
 
-    if (nomeCompleto || surname || password || specializzazione || descrizione === "" && anniEsperienza <= 0) {
-      return console.log("Errore");
-    } else {
-      console.log(`Nome: ${nomeCompleto}`);
-      console.log(`Surname: ${surname}`);
-      console.log(`Password: ${password}`);
-      console.log(`Anni di esperienza: ${anniEsperienza}`);
-      console.log(`Specializzazione scelta: ${specializzazione}`);
-      console.log(`Descrizione :${descrizione}`);
+    if (
+      nomeCompleto === "" ||
+      username === "" ||
+      password === "" ||
+      specializzazione === "" ||
+      descrizione === "" ||
+      anniEsperienza <= 0) {
+      console.log("Errore");
+      return
     }
+    console.log(`Nome: ${nomeCompleto}`);
+    console.log(`Username: ${username}`);
+    console.log(`Password: ${password}`);
+    console.log(`Anni di esperienza: ${anniEsperienza}`);
+    console.log(`Specializzazione scelta: ${specializzazione}`);
+    console.log(`Descrizione :${descrizione}`);
+
   }
+
+  const userValidation = username.trim().length >= 6 && [...username.trim()].every(c => letters.includes(c))
+  const passwordValidation = password.trim().length >= 8
+    && [...password.trim().toLowerCase()].some(c => letters.includes(c))
+    && [...password.trim().toLowerCase()].some(c => numbers.includes(c))
+    && [...password.trim().toLowerCase()].some(c => symbols.includes(c))
+  const descriptionValidation = descrizione.trim().length >= 100 && descrizione.trim().length <= 1000
 
   return (
     <>
@@ -36,28 +53,30 @@ function App() {
                 type="text"
                 value={nomeCompleto}
                 onChange={e => setNomeCompleto(e.target.value)}
-                require />
+                required />
             </div>
-            <div>Surname :
+            <div>Username :
               <input
                 type="text"
-                value={surname}
-                onChange={e => setSurname(e.target.value)}
-                require />
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                required />
+              <strong style={{ color: userValidation ? "green" : "red" }}>{userValidation ? "username valida" : "minimo 6 caratteri"}</strong>
             </div>
             <div>Password :
               <input
                 type="text"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                require />
+                required />
+              <strong style={{ color: passwordValidation ? "green" : "red" }}>{passwordValidation ? "password sicura" : "minimo 8 caratteri"}</strong>
             </div>
             <div>Anni di esperienza :
               <input
                 type="number"
                 value={anniEsperienza}
                 onChange={e => setAnniEsperienza(e.target.value)}
-                require />
+                required />
             </div>
             <div>
               <select value={specializzazione} onChange={e => setSpecializzazione(e.target.value)}>
@@ -72,7 +91,8 @@ function App() {
                 type="text"
                 value={descrizione}
                 onChange={e => setDescrizione(e.target.value)}
-                require />
+                required />
+              <strong style={{ color: descriptionValidation ? "green" : "red" }}>{descriptionValidation ? "descrizione valida" : "digita tra i 100 e i 1000 caratteri"}</strong>
             </div>
             <button>Invia dati</button>
           </form>
