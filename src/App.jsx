@@ -1,37 +1,37 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 function App() {
 
-  const [nomeCompleto, setNomeCompleto] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [specializzazione, setSpecializzazione] = useState("")
-  const [anniEsperienza, setAnniEsperienza] = useState(0)
   const [descrizione, setDescrizione] = useState("")
 
   const letters = "abcdefghijklmnopqrstuvwxyz";
   const numbers = "0123456789";
   const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
+  const nomeCompletoRef = useRef()
+  const specializzazioneRef = useRef()
+  const anniEsperienzaRef = useRef()
 
   function handleSubmit(e) {
     e.preventDefault()
 
     if (
-      nomeCompleto === "" ||
+      nomeCompletoRef.current.value === "" ||
       username === "" ||
       password === "" ||
-      specializzazione === "" ||
+      specializzazioneRef.current.value === "" ||
       descrizione === "" ||
-      anniEsperienza <= 0) {
+      anniEsperienzaRef.current.value <= 0) {
       console.log("Errore");
       return
     }
-    console.log(`Nome: ${nomeCompleto}`);
+    console.log(`Nome: ${nomeCompletoRef.current.value}`);
     console.log(`Username: ${username}`);
     console.log(`Password: ${password}`);
-    console.log(`Anni di esperienza: ${anniEsperienza}`);
-    console.log(`Specializzazione scelta: ${specializzazione}`);
+    console.log(`Anni di esperienza: ${anniEsperienzaRef.current.value}`);
+    console.log(`Specializzazione scelta: ${specializzazioneRef.current.value}`);
     console.log(`Descrizione :${descrizione}`);
 
   }
@@ -51,8 +51,7 @@ function App() {
             <div>Nome completo :
               <input
                 type="text"
-                value={nomeCompleto}
-                onChange={e => setNomeCompleto(e.target.value)}
+                ref={nomeCompletoRef}
                 required />
             </div>
             <div>Username :
@@ -74,12 +73,11 @@ function App() {
             <div>Anni di esperienza :
               <input
                 type="number"
-                value={anniEsperienza}
-                onChange={e => setAnniEsperienza(e.target.value)}
+                ref={anniEsperienzaRef}
                 required />
             </div>
             <div>
-              <select value={specializzazione} onChange={e => setSpecializzazione(e.target.value)}>
+              <select ref={specializzazioneRef}>
                 <option value="default">Seleziona una specializzazione</option>
                 <option value="fullstack">Full Stack</option>
                 <option value="frontend">Frontend</option>
